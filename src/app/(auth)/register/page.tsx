@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, Lock, Mail, User } from "lucide-react";
+import { Lock, Mail, User } from "lucide-react";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -22,7 +22,6 @@ export default function RegisterPage() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        // Llamamos a nuestra API de postgres interna
         const res = await fetch("/api/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -34,87 +33,85 @@ export default function RegisterPage() {
             setError(message || "Error al crear la cuenta");
         } else {
             setSuccess(true);
-            setTimeout(() => router.push("/login"), 2000); // Dar tiempito para leer el mensaje de exito
+            setTimeout(() => router.push("/login"), 2000);
         }
 
         setLoading(false);
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--bg-color)]">
-            <div className="max-w-md w-full feature-card p-8">
+        <div className="auth-container">
+            <div className="auth-card fade-in">
 
-                {/* Cabecera */}
-                <div className="flex flex-col items-center mb-8 fade-in">
-                    <div className="w-16 h-16 rounded-full bg-[rgba(209,163,224,0.1)] border border-[rgba(209,163,224,0.2)] flex items-center justify-center mb-4 text-[var(--primary-light)]">
+                <div className="auth-header">
+                    <div className="auth-icon-wrapper">
                         <User size={32} />
                     </div>
-                    <h1 className="text-2xl font-bold font-[var(--font-heading)] mb-2">Crear Cuenta</h1>
-                    <p className="text-[var(--text-secondary)] text-sm text-center">
+                    <h1 className="auth-title">Crear Cuenta</h1>
+                    <p className="auth-subtitle">
                         Únete a la plataforma tecnológica de Salux Vision
                     </p>
                 </div>
 
-                {/* Formulario */}
-                <form onSubmit={handleSubmit} className="space-y-6 fade-in delay-1">
+                <form onSubmit={handleSubmit} className="auth-form fade-in delay-1">
                     {error && (
-                        <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm text-center">
+                        <div className="auth-error">
                             {error}
                         </div>
                     )}
 
                     {success && (
-                        <div className="p-3 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 text-sm text-center">
+                        <div className="auth-success">
                             Cuenta creada con éxito. Redirigiendo al login...
                         </div>
                     )}
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
+                    <div className="form-group">
+                        <label className="form-label">
                             Nombre Completo
                         </label>
-                        <div className="relative">
-                            <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" size={18} />
+                        <div className="input-wrapper">
+                            <User className="input-icon" size={18} />
                             <input
                                 type="text"
                                 name="name"
                                 required
                                 disabled={loading || success}
-                                className="w-full pl-10 pr-4 py-3 bg-[rgba(0,0,0,0.2)] border border-[var(--glass-border)] rounded-xl text-white outline-none focus:border-[var(--primary)] transition-all"
+                                className="form-input"
                                 placeholder="Dr. Juan Pérez"
                             />
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
+                    <div className="form-group">
+                        <label className="form-label">
                             Correo Electrónico
                         </label>
-                        <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" size={18} />
+                        <div className="input-wrapper">
+                            <Mail className="input-icon" size={18} />
                             <input
                                 type="email"
                                 name="email"
                                 required
                                 disabled={loading || success}
-                                className="w-full pl-10 pr-4 py-3 bg-[rgba(0,0,0,0.2)] border border-[var(--glass-border)] rounded-xl text-white outline-none focus:border-[var(--primary)] transition-all"
+                                className="form-input"
                                 placeholder="juan@clinica.com"
                             />
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
+                    <div className="form-group">
+                        <label className="form-label">
                             Contraseña
                         </label>
-                        <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" size={18} />
+                        <div className="input-wrapper">
+                            <Lock className="input-icon" size={18} />
                             <input
                                 type="password"
                                 name="password"
                                 required
                                 disabled={loading || success}
-                                className="w-full pl-10 pr-4 py-3 bg-[rgba(0,0,0,0.2)] border border-[var(--glass-border)] rounded-xl text-white outline-none focus:border-[var(--primary)] transition-all"
+                                className="form-input"
                                 placeholder="Min. 8 caracteres"
                                 minLength={8}
                             />
@@ -124,18 +121,20 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={loading || success}
-                        className="w-full btn btn-primary py-3 rounded-xl disabled:opacity-50 mt-4"
+                        className="btn btn-primary btn-full"
                     >
                         {loading ? "Creando..." : "Registrarse"}
                     </button>
                 </form>
 
-                <p className="mt-8 text-center text-[var(--text-secondary)] text-sm fade-in delay-2">
-                    ¿Ya tienes acceso?{" "}
-                    <Link href="/login" className="text-[var(--primary-light)] hover:underline">
-                        Inicia sesión aquí
-                    </Link>
-                </p>
+                <div className="auth-footer fade-in delay-2">
+                    <p>
+                        ¿Ya tienes acceso?{" "}
+                        <Link href="/login" className="auth-link">
+                            Inicia sesión aquí
+                        </Link>
+                    </p>
+                </div>
 
             </div>
         </div>
