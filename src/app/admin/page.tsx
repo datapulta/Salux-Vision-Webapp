@@ -1,39 +1,74 @@
 import { auth } from "@/lib/auth/authOptions";
-import { redirect } from "next/navigation";
-import LogoutButton from "@/components/LogoutButton";
+import { Users, Activity, Clock, ShieldCheck, ArrowRight } from "lucide-react";
 
 export default async function AdminPage() {
     const session = await auth();
 
-    // Medida extra de seguridad en el servidor (aunque el middleware ya lo cubre)
-    if (session?.user?.role !== "admin") {
-        redirect("/app");
-    }
-
     return (
-        <div style={{ minHeight: "100vh", padding: "4rem 2rem", background: "var(--bg-color)" }}>
-            <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-
-                {/* Encabezado */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--glass-border)", paddingBottom: "1.5rem", marginBottom: "3rem", paddingTop: "2rem" }}>
-                    <div>
-                        <h1 style={{ fontSize: "2rem", fontWeight: "bold", fontFamily: "var(--font-heading)" }}>Panel de Administración</h1>
-                        <p style={{ color: "var(--text-secondary)", marginTop: "0.25rem" }}>Supervisa todas las clínicas y pacientes.</p>
-                    </div>
-                    <LogoutButton />
-                </div>
-
-                {/* Contenido Principal */}
-                <div className="feature-card" style={{ padding: "2rem" }}>
-                    <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>¡Hola, Administrador {session.user.name}!</h2>
-                    <p style={{ color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                        El sistema de autenticación seguro basado en roles y base de datos funciona perfectamente.
-                        Como tu rol es '<b>admin</b>', tienes acceso a este panel exclusivo e inaccesible para los pacientes estándar. <br /><br />
-                        Aquí a futuro estarán las estadísticas principales, administración de oftalmólogos y logs de las consultas gratuitas.
-                    </p>
-                </div>
-
+        <>
+            <div style={{ marginBottom: "2rem" }}>
+                <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", fontFamily: "var(--font-heading)" }}>
+                    Tablero Operativo General
+                </h1>
+                <p style={{ color: "var(--text-secondary)", marginTop: "0.25rem" }}>
+                    Supervisa expedientes médicos y solicitudes activas en tiempo real.
+                </p>
             </div>
-        </div>
+
+            <div className="dash-grid">
+                <div className="dash-card">
+                    <div className="card-icon bg-purple-light">
+                        <Users size={28} />
+                    </div>
+                    <div className="card-info">
+                        <h3>Total Pacientes</h3>
+                        <div className="card-value">124</div>
+                    </div>
+                </div>
+
+                <div className="dash-card">
+                    <div className="card-icon bg-pink-light">
+                        <Activity size={28} />
+                    </div>
+                    <div className="card-info">
+                        <h3>Triajes Pendientes</h3>
+                        <div className="card-value">12</div>
+                    </div>
+                </div>
+
+                <div className="dash-card">
+                    <div className="card-icon bg-blue-light">
+                        <Clock size={28} />
+                    </div>
+                    <div className="card-info">
+                        <h3>Citas de Hoy</h3>
+                        <div className="card-value">5</div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Resumen de Sistema */}
+            <div className="feature-card" style={{ padding: "2rem", marginTop: "2rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+                    <ShieldCheck size={28} color="var(--primary-light)" />
+                    <div>
+                        <h2 style={{ fontSize: "1.25rem", fontWeight: "600" }}>Sistema Activo</h2>
+                        <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
+                            Cifrado y Conexiones Seguras a base de datos validadas.
+                        </p>
+                    </div>
+                </div>
+                <p style={{ color: "var(--text-secondary)", lineHeight: "1.6" }}>
+                    Bienvenido nuevamente, Dr. {session?.user?.name}. Tienes acceso administrativo tipo Root. <br /><br />
+                    Pronto implementaremos la gestión completa (CRUD) del directorio de pacientes para asignar turnos a tu red de oftalmólogos y generar expedientes médicos digitales.
+                </p>
+
+                <div style={{ marginTop: "1.5rem" }}>
+                    <button className="btn btn-primary" style={{ border: "none" }}>
+                        Ver Pacientes <ArrowRight size={16} />
+                    </button>
+                </div>
+            </div>
+        </>
     );
 }
