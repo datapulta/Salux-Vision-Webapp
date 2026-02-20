@@ -1,8 +1,11 @@
-"use client";
-
+import { auth } from "@/lib/auth/authOptions";
+import Link from "next/link";
+import LogoutButton from "@/components/LogoutButton";
 import { Activity, Eye, Heart, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MedicalOrganization",
@@ -30,10 +33,24 @@ export default function Home() {
             </div>
             <span><span className="highlight">Salux</span> Vision</span>
           </div>
-          <nav aria-label="Navegación principal">
-            <button className="btn btn-secondary" aria-label="Conocer más información sobre la plataforma">
-              Conocer Más <ArrowRight size={16} aria-hidden="true" />
-            </button>
+          <nav aria-label="Navegación principal" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            {session ? (
+              <>
+                <Link href={session.user?.role === "admin" ? "/admin" : "/app"} className="btn btn-secondary" style={{ textDecoration: 'none' }}>
+                  {session.user?.role === "admin" ? "Panel Admin" : "Mi Panel"}
+                </Link>
+                <LogoutButton />
+              </>
+            ) : (
+              <>
+                <Link href="/login" style={{ color: "var(--text-secondary)", textDecoration: 'none', fontWeight: 500, fontSize: "0.875rem" }}>
+                  Iniciar Sesión
+                </Link>
+                <Link href="/register" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                  Crear Cuenta <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       </header>
@@ -53,12 +70,18 @@ export default function Home() {
               Salux Vision es una plataforma emergente de health-tech dedicada a democratizar el cuidado óptico. Impulsados por un audaz objetivo social, combinamos soluciones avanzadas de salud digital con un enfoque empático, seguro y centrado en el paciente.
             </p>
             <div className="hero-actions fade-in delay-3">
-              <button className="btn btn-primary" aria-label="Únete a la misión social de Salux Vision">
-                Únete a la Misión <Heart size={18} aria-hidden="true" />
-              </button>
-              <button className="btn btn-secondary" aria-label="Descubre cómo funciona nuestra tecnología">
+              {session ? (
+                <Link href={session.user?.role === "admin" ? "/admin" : "/app"} className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                  Ir a mi Tablero <ArrowRight size={18} aria-hidden="true" />
+                </Link>
+              ) : (
+                <Link href="/register" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                  Únete a la Misión <Heart size={18} aria-hidden="true" />
+                </Link>
+              )}
+              <a href="#main-content" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
                 Nuestra Tecnología
-              </button>
+              </a>
             </div>
           </div>
         </section>
