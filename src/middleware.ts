@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/authOptions";
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/auth/auth.config";
+
+// Inicializamos la validación de middleware usando la config de Edge sin DB conectada
+const { auth } = NextAuth(authConfig);
 
 // El middleware de NextAuth intercepta las peticiones a todas las rutas de la app 
 export default auth((req) => {

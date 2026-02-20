@@ -2,8 +2,10 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { query } from "@/lib/db";
+import { authConfig } from "./auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+    ...authConfig,
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -45,30 +47,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
             }
         })
-    ],
-    callbacks: {
-        // 1. Modificamos el JWT token para que dentro contenga a 'role' e 'id' además de la info basica (email)
-        async jwt({ token, user }) {
-            if (user) {
-                token.role = user.role; // anexamos el rol (vino del return del authorize superior)
-                token.id = user.id;
-            }
-            return token;
-        },
-        // 2. Modificamos el objeto SESSION para que desde el front-end podamos leer session.user.role
-        async session({ session, token }) {
-            if (token && session.user) {
-                session.user.role = token.role as 'admin' | 'user';
-                session.user.id = token.id as string;
-            }
-            return session;
-        }
-    },
-    pages: {
-        signIn: "/login",
-    },
-    session: {
-        strategy: "jwt" // Usaremos JSON Web Tokens HTTP-Only. Más sencillo que sesiones persistentes
-    },
-    secret: process.env.AUTH_SECRET,
+    ]
 });
