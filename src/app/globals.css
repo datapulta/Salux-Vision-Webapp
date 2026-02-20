@@ -1,19 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  --bg-color: #0d0914; /* Deep dark purple base */
+  --bg-color: #0d0914;
+  /* Deep dark purple base */
   --bg-secondary: #1a1225;
   --text-primary: #ffffff;
   --text-secondary: #b3a4c5;
-  
-  --primary: #5C4E9C; /* Logo Purple */
-  --primary-light: #D1A3E0; /* Logo Light Purple Text */
-  --secondary: #E85093; /* Logo Pink */
-  --accent-red: #DC2626; /* Logo Red */
-  --accent-blue: #2563EB; /* Logo Pupil Blue */
+
+  --primary: #5C4E9C;
+  /* Logo Purple */
+  --primary-light: #D1A3E0;
+  /* Logo Light Purple Text */
+  --secondary: #E85093;
+  /* Logo Pink */
+  --accent-red: #DC2626;
+  /* Logo Red */
+  --accent-blue: #2563EB;
+  /* Logo Pupil Blue */
   --glass-bg: rgba(26, 18, 37, 0.65);
   --glass-border: rgba(209, 163, 224, 0.15);
-  
+
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
@@ -33,7 +39,12 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   line-height: 1.2;
 }
@@ -45,33 +56,74 @@ a {
 
 /* Base Styles */
 .container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(2deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.8; }
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
 }
 
 @keyframes rotateGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .fade-in {
@@ -79,9 +131,17 @@ a {
   opacity: 0;
 }
 
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-.delay-3 { animation-delay: 0.6s; }
+.delay-1 {
+  animation-delay: 0.2s;
+}
+
+.delay-2 {
+  animation-delay: 0.4s;
+}
+
+.delay-3 {
+  animation-delay: 0.6s;
+}
 
 /* Dynamic Background Orbs */
 .bg-orb {
@@ -137,6 +197,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
 .logo {
@@ -154,6 +215,7 @@ a {
 .logo span.highlight {
   background: linear-gradient(135deg, var(--primary-light), var(--secondary));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -214,9 +276,15 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 120px 0 80px;
+  padding: 140px 0 80px;
   text-align: center;
   overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 120px 0 80px;
+  }
 }
 
 .hero-content {
@@ -250,6 +318,7 @@ a {
 .hero h1 .gradient-text {
   background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 50%, var(--accent-red) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
@@ -265,13 +334,26 @@ a {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .hero-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }
 
 .features {
-  padding: 8rem 0;
+  padding: 4rem 0;
   position: relative;
   z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .features {
+    padding: 8rem 0;
+  }
 }
 
 .section-header {
@@ -301,13 +383,20 @@ a {
 .feature-card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  padding: 2.5rem;
-  border-radius: 24px;
+  padding: 2rem;
+  border-radius: 20px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .feature-card {
+    padding: 2.5rem;
+    border-radius: 24px;
+  }
 }
 
 .feature-card::before {
@@ -344,9 +433,17 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.icon-purple { color: var(--primary-light); }
-.icon-pink { color: var(--secondary); }
-.icon-blue { color: #60A5FA; }
+.icon-purple {
+  color: var(--primary-light);
+}
+
+.icon-pink {
+  color: var(--secondary);
+}
+
+.icon-blue {
+  color: #60A5FA;
+}
 
 .feature-title {
   font-size: 1.5rem;
@@ -360,22 +457,29 @@ a {
 }
 
 .vision-section {
-  padding: 8rem 0;
+  padding: 4rem 0;
   position: relative;
   z-index: 10;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+@media (min-width: 768px) {
+  .vision-section {
+    padding: 8rem 0;
+  }
+}
+
 .vision-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1fr;
+  gap: 3rem;
   align-items: center;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 1024px) {
   .vision-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
   }
 }
 
@@ -446,15 +550,23 @@ a {
 }
 
 .footer {
-  padding: 4rem 0 2rem;
+  padding: 3rem 0 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  margin-top: 4rem;
+  margin-top: 2rem;
   position: relative;
   z-index: 10;
   text-align: center;
 }
 
+@media (min-width: 768px) {
+  .footer {
+    padding: 4rem 0 2rem;
+    margin-top: 4rem;
+  }
+}
+
 .footer-logo {
+  display: flex;
   justify-content: center;
   margin-bottom: 1.5rem;
 }
