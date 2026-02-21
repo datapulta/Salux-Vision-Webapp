@@ -22,6 +22,25 @@
 
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
+  --surface: rgba(26, 18, 37, 0.65);
+  /* default dark */
+}
+
+.light-mode {
+  --bg-color: #f7f9fc;
+  --bg-secondary: #ffffff;
+  --text-primary: #1e1e2e;
+  --text-secondary: #64748b;
+
+  --primary: #9b59b6;
+  --primary-light: #8e44ad;
+  --secondary: #E85093;
+  --accent-red: #DC2626;
+  --accent-blue: #2563EB;
+
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --surface: #ffffff;
 }
 
 * {

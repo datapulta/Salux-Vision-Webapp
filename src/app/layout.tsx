@@ -49,6 +49,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { ThemeProvider } from "@/components/ThemeProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -57,10 +59,12 @@ export default function RootLayout({
   return (
     <html lang="es" dir="ltr">
       <body className="antialiased">
-        <div className="bg-orb bg-orb-1" aria-hidden="true" />
-        <div className="bg-orb bg-orb-2" aria-hidden="true" />
-        <div className="bg-orb bg-orb-3" aria-hidden="true" />
-        {children}
+        <ThemeProvider>
+          <div className="bg-orb bg-orb-1" aria-hidden="true" />
+          <div className="bg-orb bg-orb-2" aria-hidden="true" />
+          <div className="bg-orb bg-orb-3" aria-hidden="true" />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

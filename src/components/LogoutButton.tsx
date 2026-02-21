@@ -14,7 +14,7 @@ export default function LogoutButton() {
                 padding: "0.5rem 1rem",
                 background: "var(--accent-red)",
                 opacity: "0.8",
-                color: "white",
+                color: "var(--text-primary)",
                 border: "none",
                 borderRadius: "8px",
                 cursor: "pointer",

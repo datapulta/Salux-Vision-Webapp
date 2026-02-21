@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth/authOptions";
-import { Eye, Calendar, ShieldCheck, ArrowRight } from "lucide-react";
+import { Eye, ShieldCheck, ArrowRight, UserPlus } from "lucide-react";
+import Link from 'next/link';
 
 export default async function AppDashboardPage() {
     const session = await auth();
@@ -15,53 +16,39 @@ export default async function AppDashboardPage() {
                 </p>
             </div>
 
-            {/* Tarjetas de Métricas Rápidas */}
-            <div className="dash-grid">
-                <div className="dash-card">
-                    <div className="card-icon bg-purple-light">
-                        <Eye size={28} />
+            {/* Tarjetero de Acción Principal - NUEVO */}
+            <div className="dash-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", marginBottom: "2rem" }}>
+
+                <div className="feature-card" style={{ padding: "2rem", border: "1px solid rgba(209, 163, 224, 0.2)", position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.05, pointerEvents: 'none' }}>
+                        <Eye size={150} />
                     </div>
-                    <div className="card-info">
-                        <h3>Última Medición</h3>
-                        <div className="card-value">-1.50 OD</div>
-                    </div>
+                    <h2 style={{ position: 'relative', zIndex: 2, fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.75rem", color: 'var(--primary)' }}>Tienda y Citas 👓</h2>
+                    <p style={{ position: 'relative', zIndex: 2, color: "var(--text-secondary)", marginBottom: "1.5rem", fontSize: '0.9rem', lineHeight: '1.5' }}>
+                        Explora nuestro catálogo de armazones, personaliza tus micas y agenda una cita médica para probártelos en persona.
+                    </p>
+                    <Link href="/app/book-appointment" className="btn btn-primary" style={{ position: 'relative', zIndex: 2, border: "none", width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                        Ver Catálogo y Agendar <ArrowRight size={16} />
+                    </Link>
                 </div>
 
-                <div className="dash-card">
-                    <div className="card-icon bg-pink-light">
-                        <Calendar size={28} />
-                    </div>
-                    <div className="card-info">
-                        <h3>Próxima Cita</h3>
-                        <div className="card-value">Por agendar</div>
-                    </div>
+                <div className="feature-card" style={{ padding: "2rem", border: "1px solid rgba(255, 255, 255, 0.1)", background: 'rgba(255,255,255,0.02)' }}>
+                    <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.75rem" }}>Evaluación Visual en Línea</h2>
+                    <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem", fontSize: '0.9rem', lineHeight: '1.5' }}>
+                        ¿Tienes alguna urgencia, dolor o molestia en los ojos? Inicia una consulta digital rápida con un especialista de guardia.
+                    </p>
+                    <button className="btn btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                        Solicitar Evaluación Digital <ShieldCheck size={16} />
+                    </button>
                 </div>
 
-                <div className="dash-card">
-                    <div className="card-icon bg-blue-light">
-                        <ShieldCheck size={28} />
-                    </div>
-                    <div className="card-info">
-                        <h3>Estado Clínico</h3>
-                        <div className="card-value">Estable</div>
-                    </div>
-                </div>
             </div>
 
-            {/* Acciones principales */}
-            <div className="feature-card" style={{ padding: "2rem", marginTop: "2rem", border: "1px solid rgba(209, 163, 224, 0.2)" }}>
-                <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.75rem" }}>Acciones Rápidas</h2>
-                <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
-                    Inicia tu triaje digital u obten asesoría óptica con un oftalmólogo certificado de nuestra red de impacto social.
+            <div style={{ padding: "2rem", backgroundColor: 'rgba(15,15,20,0.5)', borderRadius: '16px', border: '1px solid var(--glass-border)' }}>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: "600", marginBottom: "1rem" }}>Tu Estado Clínico (Próximamente)</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                    En esta sección podrás ver tu Historial Vísual, tus recetas pasadas (Esferas y Cilindros OD/OI) y descargar resultados de laboratorio.
                 </p>
-                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                    <button className="btn btn-primary" style={{ border: "none" }}>
-                        Solicitar Triaje Visual
-                    </button>
-                    <button className="btn btn-secondary">
-                        Agendar Cita Medica <ArrowRight size={16} />
-                    </button>
-                </div>
             </div>
         </>
     );

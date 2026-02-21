@@ -1,74 +1,100 @@
 import { auth } from "@/lib/auth/authOptions";
-import { Users, Activity, Clock, ShieldCheck, ArrowRight } from "lucide-react";
+import { query } from "@/lib/db";
+import { Users, Mail, Calendar as CalendarIcon, FileText } from "lucide-react";
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-export default async function AdminPage() {
+export default async function AdminDirectoryPage() {
     const session = await auth();
+    if (!session || session.user?.role !== 'admin') {
+        redirect('/app');
+    }
 
-    return (
-        <>
-            <div style={{ marginBottom: "2rem" }}>
-                <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", fontFamily: "var(--font-heading)" }}>
-                    Tablero Operativo General
-                </h1>
-                <p style={{ color: "var(--text-secondary)", marginTop: "0.25rem" }}>
-                    Supervisa expedientes médicos y solicitudes activas en tiempo real.
-                </p>
-            </div>
+    try {
+        const res = await query(`
+            SELECT id, name, email, role, created_at
+            FROM users 
+            WHERE role = 'user'
+            ORDER BY created_at DESC
+        `);
 
-            <div className="dash-grid">
-                <div className="dash-card">
-                    <div className="card-icon bg-purple-light">
-                        <Users size={28} />
-                    </div>
-                    <div className="card-info">
-                        <h3>Total Pacientes</h3>
-                        <div className="card-value">124</div>
-                    </div>
-                </div>
+        const patients = res.rows;
 
-                <div className="dash-card">
-                    <div className="card-icon bg-pink-light">
-                        <Activity size={28} />
-                    </div>
-                    <div className="card-info">
-                        <h3>Triajes Pendientes</h3>
-                        <div className="card-value">12</div>
-                    </div>
-                </div>
-
-                <div className="dash-card">
-                    <div className="card-icon bg-blue-light">
-                        <Clock size={28} />
-                    </div>
-                    <div className="card-info">
-                        <h3>Citas de Hoy</h3>
-                        <div className="card-value">5</div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Resumen de Sistema */}
-            <div className="feature-card" style={{ padding: "2rem", marginTop: "2rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-                    <ShieldCheck size={28} color="var(--primary-light)" />
+        return (
+            <div className="fade-in pb-12">
+                <div style={{ marginBottom: "2.5rem", display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
-                        <h2 style={{ fontSize: "1.25rem", fontWeight: "600" }}>Sistema Activo</h2>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
-                            Cifrado y Conexiones Seguras a base de datos validadas.
+                        <h1 style={{ fontSize: "2rem", fontWeight: "bold", fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
+                            Directorio Clínico
+                        </h1>
+                        <p style={{ color: "var(--text-secondary)", marginTop: "0.25rem", fontSize: "1.1rem" }}>
+                            Gestiona los expedientes y cuentas de tus pacientes reales.
                         </p>
                     </div>
+                    <div style={{ background: 'var(--surface)', padding: '0.8rem 1.5rem', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                        <Users size={20} color="var(--primary)" />
+                        <span style={{ fontWeight: 'bold', color: 'var(--text-primary)', fontSize: '1.1rem' }}>{patients.length} Pacientes</span>
+                    </div>
                 </div>
-                <p style={{ color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                    Bienvenido nuevamente, Dr. {session?.user?.name}. Tienes acceso administrativo tipo Root. <br /><br />
-                    Pronto implementaremos la gestión completa (CRUD) del directorio de pacientes para asignar turnos a tu red de oftalmólogos y generar expedientes médicos digitales.
-                </p>
 
-                <div style={{ marginTop: "1.5rem" }}>
-                    <button className="btn btn-primary" style={{ border: "none" }}>
-                        Ver Pacientes <ArrowRight size={16} />
-                    </button>
+                <div style={{ background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--glass-border)', overflow: 'hidden' }}>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse' }}>
+                            <thead style={{ background: 'rgba(128,128,128,0.05)', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.8rem', letterSpacing: '1px' }}>
+                                <tr>
+                                    <th style={{ padding: '1.2rem 1.5rem', fontWeight: 'bold' }}>PACIENTE</th>
+                                    <th style={{ padding: '1.2rem 1rem', fontWeight: 'bold' }}>CORREO / CONTACTO</th>
+                                    <th style={{ padding: '1.2rem 1rem', fontWeight: 'bold' }}>FECHA DE REGISTRO</th>
+                                    <th style={{ padding: '1.2rem 1.5rem', fontWeight: 'bold', textAlign: 'right' }}>ACCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {patients.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} style={{ padding: '4rem 2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                                            <Users size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.2 }} />
+                                            No hay pacientes registrados aún en la base de datos real.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    patients.map((patient) => (
+                                        <tr key={patient.id} style={{ borderBottom: '1px solid var(--glass-border)' }}>
+                                            <td style={{ padding: '1.2rem 1.5rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                    <div style={{ width: '45px', height: '45px', background: 'var(--primary)', opacity: 0.9, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                                                        {patient.name?.charAt(0).toUpperCase() || 'U'}
+                                                    </div>
+                                                    <div style={{ color: 'var(--text-primary)', fontWeight: 'bold', fontSize: '1.05rem' }}>
+                                                        {patient.name}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style={{ padding: '1.2rem 1rem', color: 'var(--text-secondary)' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <Mail size={16} /> {patient.email}
+                                                </div>
+                                            </td>
+                                            <td style={{ padding: '1.2rem 1rem', color: 'var(--text-secondary)' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <CalendarIcon size={16} /> {new Date(patient.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                </div>
+                                            </td>
+                                            <td style={{ padding: '1.2rem 1.5rem', textAlign: 'right' }}>
+                                                <Link href={`/admin/appointments?user=${patient.id}`} className="btn btn-secondary" style={{ padding: '0.6rem 1rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}>
+                                                    <FileText size={14} /> Ver Citas / Expediente
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </>
-    );
+        );
+    } catch (error) {
+        console.error("Directory error:", error);
+        return <div style={{ color: 'var(--text-primary)' }}>Error al conectar con la base de datos de pacientes.</div>;
+    }
 }

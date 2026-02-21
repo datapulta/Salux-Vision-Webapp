@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Eye, Home, Calendar, Settings, Users, Activity, FileText } from "lucide-react";
+import { Menu, X, Eye, Home, Calendar, Settings, Users, Activity, FileText, Package } from "lucide-react";
 import LogoutButton from "@/components/LogoutButton";
 
 interface DashboardLayoutProps {
@@ -20,7 +20,7 @@ export default function DashboardLayout({ children, userRole, userName }: Dashbo
 
     const patientLinks = [
         { name: "Mi Ficha de Salud", href: "/app", icon: Home },
-        { name: "Triaje y Citas", href: "/app/appointments", icon: Calendar },
+        { name: "Mis Citas", href: "/app/appointments", icon: Calendar },
         { name: "Resultados", href: "/app/results", icon: FileText },
         { name: "Ajustes", href: "/app/settings", icon: Settings },
     ];
@@ -29,6 +29,8 @@ export default function DashboardLayout({ children, userRole, userName }: Dashbo
         { name: "Directorio Clínico", href: "/admin", icon: Users },
         { name: "Panel General", href: "/admin/dashboard", icon: Activity },
         { name: "Agenda Global", href: "/admin/appointments", icon: Calendar },
+        { name: "Catálogo / Inventario", href: "/admin/inventory", icon: Package },
+        { name: "Ventas y Finanzas", href: "/admin/sales", icon: FileText },
         { name: "Ajustes", href: "/admin/settings", icon: Settings },
     ];
 

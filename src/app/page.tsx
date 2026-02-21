@@ -43,6 +43,9 @@ export default async function Home() {
               </>
             ) : (
               <>
+                <Link href="/catalogo" style={{ color: "var(--text-secondary)", textDecoration: 'none', fontWeight: 500, fontSize: "0.875rem", marginRight: '1rem' }}>
+                  Catálogo
+                </Link>
                 <Link href="/login" style={{ color: "var(--text-secondary)", textDecoration: 'none', fontWeight: 500, fontSize: "0.875rem" }}>
                   Iniciar Sesión
                 </Link>
