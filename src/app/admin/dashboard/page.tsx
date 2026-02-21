@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { query } from "@/lib/db";
 import { redirect } from 'next/navigation';
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboardPage() {
     const session = await auth();
     if (!session || session.user?.role !== 'admin') {

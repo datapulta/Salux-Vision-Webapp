@@ -4,6 +4,8 @@ import { Users, Mail, Calendar as CalendarIcon, FileText } from "lucide-react";
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDirectoryPage() {
     const session = await auth();
     if (!session || session.user?.role !== 'admin') {

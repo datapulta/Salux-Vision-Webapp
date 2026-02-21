@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth/authOptions";
 import { redirect } from "next/navigation";
 import { query } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 import ClientInventory, { FrameData } from "./ClientInventory";
 
 export default async function AdminInventoryPage() {

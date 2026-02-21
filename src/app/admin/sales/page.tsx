@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { query } from "@/lib/db";
 import { DollarSign, Package, TrendingUp } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function SalesPage() {
     const session = await auth();
 

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Eye, Clock, Ruler, ArrowRight } from "lucide-react";
 import { query } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function BookAppointmentPage() {
 
     const res = await query(`

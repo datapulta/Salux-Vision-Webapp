@@ -5,6 +5,8 @@ import { auth } from "@/lib/auth/authOptions";
 import { query } from "@/lib/db";
 import { use } from 'react';
 
+export const dynamic = "force-dynamic";
+
 export default function ScheduleAppointment({ params }: { params: Promise<{ frameId: string }> }) {
     const resolvedParams = use(params);
     const frameId = resolvedParams.frameId;

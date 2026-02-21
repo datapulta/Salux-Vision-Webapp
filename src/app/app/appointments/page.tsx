@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation';
 
 import { query } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function MyAppointmentsPage() {
     const session = await auth();
     if (!session || !session.user) return redirect('/login');

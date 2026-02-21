@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Eye, ArrowRight, ArrowLeft } from "lucide-react";
 import { query } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function PublicCatalogPage() {
 
     const res = await query(`
