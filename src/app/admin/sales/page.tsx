@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth/authOptions";
 import { redirect } from "next/navigation";
 import { query } from "@/lib/db";
-import { DollarSign, Tremor, Package, TrendingUp } from "lucide-react";
+import { DollarSign, Package, TrendingUp } from "lucide-react";
 
 export default async function SalesPage() {
     const session = await auth();
