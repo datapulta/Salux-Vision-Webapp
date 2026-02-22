@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth/authOptions";
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function PATCH(request: Request, context: { params: { id: string } }) {
+export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
     try {
         const session = await auth();
 
@@ -10,7 +10,7 @@ export async function PATCH(request: Request, context: { params: { id: string } 
             return NextResponse.json({ error: "No autorizado" }, { status: 403 });
         }
 
-        const { id } = context.params;
+        const { id } = await context.params;
         const body = await request.json();
         const { phone, is_active } = body;
 
