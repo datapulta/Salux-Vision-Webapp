@@ -69,7 +69,7 @@ export default async function BookAppointmentPage() {
                                 top: '1rem',
                                 left: '1rem',
                                 background: 'rgba(0,0,0,0.6)',
-                                color: 'var(--text-primary)',
+                                color: '#ffffff',
                                 padding: '0.4rem 0.8rem',
                                 borderRadius: '20px',
                                 fontSize: '0.75rem',
@@ -89,7 +89,7 @@ export default async function BookAppointmentPage() {
                                     <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '0.2rem' }}>{frame.name}</h3>
                                     <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>{frame.brand}</span>
                                 </div>
-                                <div style={{ background: 'var(--primary)', color: 'var(--text-primary)', padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                                <div style={{ background: 'var(--primary)', color: '#ffffff', padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 'bold' }}>
                                     ${frame.price}
                                 </div>
                             </div>

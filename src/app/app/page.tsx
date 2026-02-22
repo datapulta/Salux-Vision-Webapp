@@ -1,55 +1,74 @@
 import { auth } from "@/lib/auth/authOptions";
-import { Eye, ShieldCheck, ArrowRight, UserPlus } from "lucide-react";
+import { Eye, ShieldCheck, ArrowRight, Sparkles, Activity } from "lucide-react";
 import Link from 'next/link';
 
 export default async function AppDashboardPage() {
     const session = await auth();
 
     return (
-        <>
-            <div style={{ marginBottom: "2rem" }}>
-                <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", fontFamily: "var(--font-heading)" }}>
-                    ¡Hola de nuevo, {session?.user?.name?.split(' ')[0]}!
+        <div className="fade-in pb-12">
+            <div style={{ marginBottom: "2.5rem" }}>
+                <h1 className="gradient-text" style={{ fontSize: "2.25rem", fontWeight: "800", marginBottom: '0.5rem' }}>
+                    ¡Hola, {session?.user?.name?.split(' ')[0]}!
                 </h1>
-                <p style={{ color: "var(--text-secondary)", marginTop: "0.25rem" }}>
-                    Aquí tienes un resumen de tu salud visual y próximos pasos.
+                <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", fontWeight: '500' }}>
+                    Bienvenido a tu portal de salud visual. Revisa tus próximos pasos.
                 </p>
             </div>
 
-            {/* Tarjetero de Acción Principal - NUEVO */}
-            <div className="dash-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", marginBottom: "2rem" }}>
+            {/* Tarjetero de Acción Principal */}
+            <div className="dash-grid" style={{ marginBottom: "2.5rem" }}>
 
-                <div className="feature-card" style={{ padding: "2rem", border: "1px solid rgba(209, 163, 224, 0.2)", position: 'relative', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.05, pointerEvents: 'none' }}>
-                        <Eye size={150} />
+                <div className="feature-card" style={{
+                    padding: "2.5rem",
+                    background: 'linear-gradient(135deg, var(--bg-secondary), var(--surface))',
+                    border: "1px solid var(--primary-glow)",
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}>
+                    <div style={{ position: 'absolute', top: '-40px', right: '-40px', opacity: 0.1, pointerEvents: 'none' }}>
+                        <Eye size={200} color="var(--primary)" />
                     </div>
-                    <h2 style={{ position: 'relative', zIndex: 2, fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.75rem", color: 'var(--primary)' }}>Tienda y Citas 👓</h2>
-                    <p style={{ position: 'relative', zIndex: 2, color: "var(--text-secondary)", marginBottom: "1.5rem", fontSize: '0.9rem', lineHeight: '1.5' }}>
-                        Explora nuestro catálogo de armazones, personaliza tus micas y agenda una cita médica para probártelos en persona.
+                    <div className="badge" style={{ backgroundColor: 'rgba(109, 93, 252, 0.1)', color: 'var(--primary)', marginBottom: '1rem' }}>
+                        <Sparkles size={12} style={{ marginRight: '6px' }} /> Recomendado
+                    </div>
+                    <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem" }}>Catálogo y Agendamiento 👓</h2>
+                    <p style={{ color: "var(--text-secondary)", marginBottom: "2rem", fontSize: '1rem', lineHeight: '1.6', maxWidth: '400px' }}>
+                        Explora nuestra colección de armazones sociales y agenda tu cita médica para un diagnóstico profesional.
                     </p>
-                    <Link href="/app/book-appointment" className="btn btn-primary" style={{ position: 'relative', zIndex: 2, border: "none", width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
-                        Ver Catálogo y Agendar <ArrowRight size={16} />
+                    <Link href="/app/book-appointment" className="btn btn-primary" style={{ padding: '0.85rem 1.5rem', width: 'fit-content' }}>
+                        Ver Catálogo y Agendar <ArrowRight size={18} />
                     </Link>
                 </div>
 
-                <div className="feature-card" style={{ padding: "2rem", border: "1px solid rgba(255, 255, 255, 0.1)", background: 'rgba(255,255,255,0.02)' }}>
-                    <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.75rem" }}>Evaluación Visual en Línea</h2>
-                    <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem", fontSize: '0.9rem', lineHeight: '1.5' }}>
-                        ¿Tienes alguna urgencia, dolor o molestia en los ojos? Inicia una consulta digital rápida con un especialista de guardia.
+                <div className="feature-card" style={{
+                    padding: "2.5rem",
+                    background: 'var(--glass-surface)',
+                    border: "1px solid var(--glass-border)"
+                }}>
+                    <div className="card-icon bg-blue-light" style={{ marginBottom: '1.5rem', width: '50px', height: '50px' }}>
+                        <Activity size={24} />
+                    </div>
+                    <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem" }}>Evaluación Digital</h2>
+                    <p style={{ color: "var(--text-secondary)", marginBottom: "2rem", fontSize: '1rem', lineHeight: '1.6' }}>
+                        Encuentro virtual rápido con un especialista para dudas o urgencias menores.
                     </p>
-                    <button className="btn btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                        Solicitar Evaluación Digital <ShieldCheck size={16} />
+                    <button className="btn btn-secondary" style={{ padding: '0.85rem 1.5rem' }}>
+                        Solicitar Consulta <ShieldCheck size={18} />
                     </button>
                 </div>
 
             </div>
 
-            <div style={{ padding: "2rem", backgroundColor: 'rgba(15,15,20,0.5)', borderRadius: '16px', border: '1px solid var(--glass-border)' }}>
-                <h3 style={{ fontSize: "1.1rem", fontWeight: "600", marginBottom: "1rem" }}>Tu Estado Clínico (Próximamente)</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                    En esta sección podrás ver tu Historial Vísual, tus recetas pasadas (Esferas y Cilindros OD/OI) y descargar resultados de laboratorio.
-                </p>
+            <div className="dash-card" style={{ padding: "2.5rem", background: 'rgba(0,0,0,0.2)', borderStyle: 'dashed' }}>
+                <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: "1.25rem", fontWeight: "700", marginBottom: "0.5rem" }}>Tu Expediente Clínico</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                        Estamos digitalizando tu historial. Pronto podrás ver tus recetas pasadas (Esferas y Cilindros),
+                        monitorear tu agudeza visual y descargar resultados de laboratorio directamente aquí.
+                    </p>
+                </div>
             </div>
-        </>
+        </div>
     );
 }

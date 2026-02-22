@@ -26,28 +26,30 @@ export default async function AdminDirectoryPage() {
             <div className="fade-in pb-12">
                 <div style={{ marginBottom: "2.5rem", display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
-                        <h1 style={{ fontSize: "2rem", fontWeight: "bold", fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
+                        <h1 className="gradient-text" style={{ fontSize: "2.25rem", fontWeight: "800", marginBottom: '0.5rem' }}>
                             Directorio Clínico
                         </h1>
-                        <p style={{ color: "var(--text-secondary)", marginTop: "0.25rem", fontSize: "1.1rem" }}>
-                            Gestiona los expedientes y cuentas de tus pacientes reales.
+                        <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", fontWeight: '500' }}>
+                            Gestión centralizada de expedientes y cuentas de pacientes.
                         </p>
                     </div>
-                    <div style={{ background: 'var(--surface)', padding: '0.8rem 1.5rem', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                        <Users size={20} color="var(--primary)" />
-                        <span style={{ fontWeight: 'bold', color: 'var(--text-primary)', fontSize: '1.1rem' }}>{patients.length} Pacientes</span>
+                    <div className="dash-card" style={{ padding: '0.75rem 1.5rem', background: 'var(--primary-glow)', border: '1px solid var(--primary)' }}>
+                        <Users size={24} color="var(--primary)" />
+                        <div className="card-info">
+                            <div className="card-value" style={{ fontSize: '1.25rem' }}>{patients.length} Registrados</div>
+                        </div>
                     </div>
                 </div>
 
-                <div style={{ background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--glass-border)', overflow: 'hidden' }}>
+                <div className="table-container fade-in">
                     <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse' }}>
-                            <thead style={{ background: 'rgba(128,128,128,0.05)', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.8rem', letterSpacing: '1px' }}>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <th style={{ padding: '1.2rem 1.5rem', fontWeight: 'bold' }}>PACIENTE</th>
-                                    <th style={{ padding: '1.2rem 1rem', fontWeight: 'bold' }}>CORREO / CONTACTO</th>
-                                    <th style={{ padding: '1.2rem 1rem', fontWeight: 'bold' }}>FECHA DE REGISTRO</th>
-                                    <th style={{ padding: '1.2rem 1.5rem', fontWeight: 'bold', textAlign: 'right' }}>ACCIONES</th>
+                                    <th>PACIENTE</th>
+                                    <th>CORREO / CONTACTO</th>
+                                    <th>FECHA DE REGISTRO</th>
+                                    <th style={{ textAlign: 'right' }}>ACCIONES</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,35 +57,47 @@ export default async function AdminDirectoryPage() {
                                     <tr>
                                         <td colSpan={4} style={{ padding: '4rem 2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                                             <Users size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.2 }} />
-                                            No hay pacientes registrados aún en la base de datos real.
+                                            No hay pacientes registrados aún.
                                         </td>
                                     </tr>
                                 ) : (
                                     patients.map((patient) => (
-                                        <tr key={patient.id} style={{ borderBottom: '1px solid var(--glass-border)' }}>
-                                            <td style={{ padding: '1.2rem 1.5rem' }}>
+                                        <tr key={patient.id}>
+                                            <td>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{ width: '45px', height: '45px', background: 'var(--primary)', opacity: 0.9, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                                                    <div style={{
+                                                        width: '40px',
+                                                        height: '40px',
+                                                        background: 'var(--primary)',
+                                                        borderRadius: '12px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: 'white',
+                                                        fontWeight: 'bold',
+                                                        boxShadow: '0 4px 8px var(--primary-glow)'
+                                                    }}>
                                                         {patient.name?.charAt(0).toUpperCase() || 'U'}
                                                     </div>
-                                                    <div style={{ color: 'var(--text-primary)', fontWeight: 'bold', fontSize: '1.05rem' }}>
-                                                        {patient.name}
+                                                    <div>
+                                                        <div style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{patient.name}</div>
+                                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ID: {patient.id.substring(0, 8)}</div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1.2rem 1rem', color: 'var(--text-secondary)' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                    <Mail size={16} /> {patient.email}
+                                            <td>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>
+                                                    <Mail size={14} /> {patient.email}
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1.2rem 1rem', color: 'var(--text-secondary)' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                    <CalendarIcon size={16} /> {new Date(patient.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                            <td>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>
+                                                    <CalendarIcon size={14} /> {new Date(patient.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1.2rem 1.5rem', textAlign: 'right' }}>
-                                                <Link href={`/admin/appointments?user=${patient.id}`} className="btn btn-secondary" style={{ padding: '0.6rem 1rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}>
-                                                    <FileText size={14} /> Ver Citas / Expediente
+                                            <td style={{ textAlign: 'right' }}>
+                                                <Link href={`/admin/appointments?user=${patient.id}`} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
+                                                    <FileText size={14} /> Expediente
                                                 </Link>
                                             </td>
                                         </tr>

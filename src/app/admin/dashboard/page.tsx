@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth/authOptions";
-import { Users, Activity, Clock, ShieldCheck, Calendar } from "lucide-react";
+import { Users, Activity, Clock, ShieldCheck, Calendar, ArrowRight } from "lucide-react";
 import Link from 'next/link';
 import { query } from "@/lib/db";
 import { redirect } from 'next/navigation';
@@ -24,66 +24,82 @@ export default async function AdminDashboardPage() {
         return (
             <div className="fade-in pb-12">
                 <div style={{ marginBottom: "2.5rem" }}>
-                    <h1 style={{ fontSize: "2rem", fontWeight: "bold", fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>
+                    <h1 className="gradient-text" style={{ fontSize: "2.25rem", fontWeight: "800", marginBottom: '0.5rem' }}>
                         Panel General
                     </h1>
-                    <p style={{ color: "var(--text-secondary)", marginTop: "0.25rem", fontSize: "1.1rem" }}>
-                        Supervisa métricas de la clínica y solicitudes activas en tiempo real.
+                    <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", fontWeight: '500' }}>
+                        Métricas operativas y supervisión clínica en tiempo real.
                     </p>
                 </div>
 
                 <div className="dash-grid">
-                    <Link href="/admin" className="dash-card" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--glass-border)' }}>
+                    <Link href="/admin" className="dash-card">
                         <div className="card-icon bg-purple-light">
-                            <Users size={28} />
+                            <Users size={24} strokeWidth={2.5} />
                         </div>
                         <div className="card-info">
-                            <h3 style={{ color: 'var(--text-secondary)' }}>Pacientes Totales</h3>
-                            <div className="card-value" style={{ color: 'var(--text-primary)' }}>{totalPacientes}</div>
+                            <h3>Pacientes Totales</h3>
+                            <div className="card-value">{totalPacientes}</div>
                         </div>
                     </Link>
 
-                    <Link href="/admin/appointments" className="dash-card" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--glass-border)' }}>
+                    <Link href="/admin/appointments" className="dash-card">
                         <div className="card-icon bg-pink-light">
-                            <Activity size={28} />
+                            <Activity size={24} strokeWidth={2.5} />
                         </div>
                         <div className="card-info">
-                            <h3 style={{ color: 'var(--text-secondary)' }}>Consultas Pendientes</h3>
-                            <div className="card-value" style={{ color: 'var(--text-primary)' }}>{citasPendientes}</div>
+                            <h3>Pendientes</h3>
+                            <div className="card-value">{citasPendientes}</div>
                         </div>
                     </Link>
 
-                    <Link href="/admin/appointments" className="dash-card" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--glass-border)' }}>
+                    <Link href="/admin/appointments" className="dash-card">
                         <div className="card-icon bg-blue-light">
-                            <Clock size={28} />
+                            <Clock size={24} strokeWidth={2.5} />
                         </div>
                         <div className="card-info">
-                            <h3 style={{ color: 'var(--text-secondary)' }}>Citas de Hoy</h3>
-                            <div className="card-value" style={{ color: 'var(--text-primary)' }}>{citasHoy}</div>
+                            <h3>Citas de Hoy</h3>
+                            <div className="card-value">{citasHoy}</div>
                         </div>
                     </Link>
                 </div>
 
-                {/* Resumen de Sistema */}
-                <div className="feature-card" style={{ padding: "2rem", marginTop: "2rem", background: 'var(--surface)', border: '1px solid var(--glass-border)' }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-                        <ShieldCheck size={28} color="var(--primary)" />
-                        <div>
-                            <h2 style={{ fontSize: "1.25rem", fontWeight: "600", color: 'var(--text-primary)' }}>Sistema Activo</h2>
-                            <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
-                                Cifrado y Conexiones Seguras a base de datos validadas.
-                            </p>
-                        </div>
-                    </div>
-                    <p style={{ color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                        Bienvenido nuevamente, Administrador {session?.user?.name}. <br /><br />
-                        Los pacientes pueden agendar citas y apartar productos en línea. Todas las reservas llegarán a tu nueva Agenda interactiva en tiempo real.
-                    </p>
+                {/* Resumen de Sistema UI mejorada */}
+                <div className="feature-card" style={{
+                    padding: "2.5rem",
+                    marginTop: "2rem",
+                    background: 'linear-gradient(135deg, var(--bg-secondary), var(--surface))',
+                    border: '1px solid var(--glass-border)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}>
+                    {/* Decorative Background Icon */}
+                    <ShieldCheck size={200} color="var(--primary)" style={{ position: 'absolute', right: '-40px', bottom: '-40px', opacity: 0.05 }} />
 
-                    <div style={{ marginTop: "1.5rem", display: 'flex', gap: '1rem' }}>
-                        <Link href="/admin/appointments" className="btn btn-primary" style={{ border: "none", textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Calendar size={16} /> Ver Agenda Interactiva
-                        </Link>
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+                            <div style={{ background: 'var(--primary-glow)', padding: '12px', borderRadius: '14px' }}>
+                                <ShieldCheck size={32} color="var(--primary)" />
+                            </div>
+                            <div>
+                                <h2 style={{ fontSize: "1.5rem", fontWeight: "700", color: 'var(--text-primary)' }}>Integridad del Sistema</h2>
+                                <span className="status-badge status-completed">Estado: Óptimo</span>
+                            </div>
+                        </div>
+
+                        <p style={{ color: "var(--text-secondary)", lineHeight: "1.8", fontSize: '1.1rem', maxWidth: '700px', marginBottom: '2rem' }}>
+                            Hola, <strong style={{ color: 'var(--text-primary)' }}>{session?.user?.name}</strong>. El motor de Salux Vision se encuentra sincronizado con la base de datos central.
+                            Las citas agendadas por pacientes se reflejan instantáneamente en la agenda global.
+                        </p>
+
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                            <Link href="/admin/appointments" className="btn btn-primary" style={{ padding: '1rem 2rem' }}>
+                                <Calendar size={18} /> Gestionar Agenda <ArrowRight size={18} />
+                            </Link>
+                            <Link href="/admin/inventory" className="btn btn-secondary" style={{ padding: '1rem 2rem' }}>
+                                Revisar Inventario
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

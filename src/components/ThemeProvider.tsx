@@ -11,15 +11,15 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setTheme] = useState<Theme>('dark');
+    const [theme, setTheme] = useState<Theme>('light');
 
     useEffect(() => {
         const stored = localStorage.getItem('salux_theme') as Theme;
         if (stored === 'light' || stored === 'dark') {
             setTheme(stored);
         } else {
-            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-            if (prefersLight) setTheme('light');
+            // Force light mode by default as requested by the user for performance.
+            setTheme('light');
         }
     }, []);
 

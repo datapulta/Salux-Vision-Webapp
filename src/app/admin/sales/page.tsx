@@ -94,7 +94,7 @@ export default async function SalesPage() {
                 {salesList.length > 0 ? (
                     <div style={{ overflowX: 'auto' }}>
                         <table className="appointments-table" style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse' }}>
-                            <thead style={{ background: 'rgba(255,255,255,0.02)', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                            <thead style={{ background: 'var(--glass-surface)', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
                                 <tr>
                                     <th style={{ padding: '1rem', borderBottom: '1px solid var(--glass-border)' }}>Fecha de Venta</th>
                                     <th style={{ padding: '1rem', borderBottom: '1px solid var(--glass-border)' }}>Paciente</th>

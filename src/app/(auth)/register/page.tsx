@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Lock, Mail, User } from "lucide-react";
+import { Lock, Mail, User, ArrowLeft } from "lucide-react";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -41,6 +41,16 @@ export default function RegisterPage() {
 
     return (
         <div className="auth-container">
+            <Link
+                href="/"
+                className="auth-back-btn fade-in"
+            >
+                <div className="auth-back-icon">
+                    <ArrowLeft size={16} />
+                </div>
+                <span>Volver al Inicio</span>
+            </Link>
+
             <div className="auth-card fade-in">
 
                 <div className="auth-header">

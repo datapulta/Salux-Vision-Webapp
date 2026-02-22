@@ -117,7 +117,7 @@ export default async function MyAppointmentsPage() {
             </div>
 
             {/* Aviso Historial */}
-            <div style={{ marginTop: '3rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)' }}>
+            <div style={{ marginTop: '3rem', padding: '1.5rem', background: 'var(--glass-surface)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)' }}>
                 <AlertCircle size={24} color="var(--primary)" />
                 <p style={{ fontSize: '0.95rem' }}>Las citas pasadas o completadas se moverán automáticamente a tu <strong>Historial Clínico</strong> una vez que el oftalmólogo suba tu receta digital a la plataforma.</p>
             </div>

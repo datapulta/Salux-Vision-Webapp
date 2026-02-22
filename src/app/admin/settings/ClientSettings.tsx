@@ -24,7 +24,7 @@ export default function ClientSettings() {
                     </h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--glass-border)', transition: 'transform 0.2s', cursor: 'pointer' }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '1.5rem', background: 'var(--glass-surface)', borderRadius: '12px', border: '1px solid var(--glass-border)', transition: 'transform 0.2s', cursor: 'pointer' }}>
                             <div>
                                 <h3 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     Tema Visual
@@ -53,7 +53,7 @@ export default function ClientSettings() {
                             </button>
                         </div>
 
-                        <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px dashed var(--glass-border)', opacity: 0.6 }}>
+                        <div style={{ padding: '1.5rem', background: 'var(--glass-surface)', borderRadius: '12px', border: '1px dashed var(--glass-border)', opacity: 0.6 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.5rem' }}>
                                 <Smartphone size={18} color="var(--text-secondary)" />
                                 <span style={{ color: 'var(--text-primary)', fontWeight: 'bold' }}>Logo Web y App (Próximamente)</span>

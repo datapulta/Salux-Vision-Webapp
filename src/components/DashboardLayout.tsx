@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Eye, Home, Calendar, Settings, Users, Activity, FileText, Package } from "lucide-react";
 import LogoutButton from "@/components/LogoutButton";
-
+import ThemeToggle from "@/components/ThemeToggle";
 interface DashboardLayoutProps {
     children: React.ReactNode;
     userRole: "admin" | "user";
@@ -47,25 +47,29 @@ export default function DashboardLayout({ children, userRole, userName }: Dashbo
                 />
             )}
 
-            {/* Barra Lateral (Sidebar) */}
-            <aside className={`dashboard-sidebar ${sidebarOpen ? 'mobile-show' : 'mobile-hidden'}`}>
+            {/* Barra Lateral (Sidebar) - Mejora en Mobile */}
+            <aside className={`dashboard-sidebar ${sidebarOpen ? 'mobile-show' : ''}`}>
                 <div className="sidebar-header">
-                    <Link href="/" className="logo" style={{ fontSize: "1.25rem" }}>
-                        <div className="logo-icon-wrapper" style={{ width: "32px", height: "32px" }}>
-                            <Eye size={20} color="var(--secondary)" strokeWidth={2.5} />
+                    <Link href="/" className="logo">
+                        <div className="logo-icon-wrapper" style={{ width: "32px", height: "32px", background: 'var(--primary-glow)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Eye size={20} color="var(--primary)" strokeWidth={2.5} />
                         </div>
-                        <span><span className="highlight">Salux</span></span>
+                        <span style={{ fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.5px' }}>
+                            <span className="gradient-text">Salux</span> Vision
+                        </span>
                     </Link>
                     <button className="menu-toggle lg-hidden" onClick={toggleSidebar}>
-                        <X size={24} />
+                        <X size={20} />
                     </button>
                 </div>
 
                 <nav className="sidebar-nav">
-                    <div className="nav-section-title">MENÚ PRINCIPAL</div>
                     {links.map((link) => {
                         const Icon = link.icon;
-                        const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+                        const isRootLink = link.href === '/admin' || link.href === '/app';
+                        const isActive = isRootLink
+                            ? pathname === link.href
+                            : (pathname === link.href || pathname.startsWith(link.href + '/'));
                         return (
                             <Link
                                 key={link.name}
@@ -91,21 +95,25 @@ export default function DashboardLayout({ children, userRole, userName }: Dashbo
                 {/* Barra Superior */}
                 <header className="dashboard-topbar">
                     <div className="topbar-left">
-                        <button className="menu-toggle lg-hidden" onClick={toggleSidebar} aria-label="Toggle Menu">
-                            <Menu size={24} />
+                        <button className="menu-toggle lg-hidden" onClick={toggleSidebar} aria-label="Toggle Menu" style={{ padding: '8px', background: 'var(--glass-surface)', borderRadius: '10px' }}>
+                            <Menu size={20} />
                         </button>
-                        <h2 className="topbar-title">
-                            {links.find(l => pathname === l.href || pathname.startsWith(l.href + '/'))?.name || "Panel"}
+                        <h2 className="topbar-title" style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-primary)' }}>
+                            {links.find(link => {
+                                const isRootLink = link.href === '/admin' || link.href === '/app';
+                                return isRootLink ? pathname === link.href : (pathname === link.href || pathname.startsWith(link.href + '/'));
+                            })?.name || "Panel"}
                         </h2>
                     </div>
 
                     <div className="topbar-right">
+                        <ThemeToggle />
                         <div className="user-profile">
                             <div className="user-info">
                                 <p className="user-name">{userName}</p>
                                 <p className="user-role">{userRole === 'admin' ? 'Especialista' : 'Paciente'}</p>
                             </div>
-                            <div className="user-avatar">
+                            <div className="user-avatar" style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))', border: 'none', boxShadow: '0 4px 10px var(--primary-glow)' }}>
                                 {initials}
                             </div>
                         </div>
@@ -116,6 +124,26 @@ export default function DashboardLayout({ children, userRole, userName }: Dashbo
                 <div className="dashboard-content fade-in">
                     {children}
                 </div>
+
+                {/* Mobile Navigation Bar - El "Surprise" para el usuario */}
+                <nav className="mobile-nav-bar">
+                    {links.slice(0, 4).map((link) => {
+                        const Icon = link.icon;
+                        const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+                        return (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className={`mobile-nav-item ${isActive ? "active" : ""}`}
+                            >
+                                <div className="icon-box">
+                                    <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                                </div>
+                                <span>{link.name.split(' ')[0]}</span> {/* Solo la primera palabra para que quepa bien */}
+                            </Link>
+                        );
+                    })}
+                </nav>
 
             </main>
         </div>

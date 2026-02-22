@@ -4,8 +4,8 @@ import "./globals.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0d0914",
-  colorScheme: "dark",
+  themeColor: "#ffffff",
+  colorScheme: "light",
 };
 
 export const metadata: Metadata = {
@@ -57,12 +57,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" dir="ltr">
+    <html lang="es" dir="ltr" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const storedTheme = localStorage.getItem('salux_theme');
+                if (storedTheme === 'dark') {
+                  document.documentElement.classList.remove('light-mode');
+                } else if (storedTheme === 'light') {
+                  document.documentElement.classList.add('light-mode');
+                } else {
+                  // Default to light if no theme is strictly set based on user's new request
+                  document.documentElement.classList.add('light-mode');
+                  localStorage.setItem('salux_theme', 'light');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased">
         <ThemeProvider>
-          <div className="bg-orb bg-orb-1" aria-hidden="true" />
-          <div className="bg-orb bg-orb-2" aria-hidden="true" />
-          <div className="bg-orb bg-orb-3" aria-hidden="true" />
           {children}
         </ThemeProvider>
       </body>
