@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Users, Mail, Calendar as CalendarIcon, FileText, Settings, Key, X, Phone, UserCheck, UserX } from "lucide-react";
 
@@ -20,6 +21,11 @@ export default function ClientDirectoryTable({ initialPatients }: { initialPatie
     const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
     const [editPhone, setEditPhone] = useState("");
     const [isSaving, setIsSaving] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const filteredPatients = patients.filter(
         (p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -99,10 +105,10 @@ export default function ClientDirectoryTable({ initialPatients }: { initialPatie
                 <input
                     type="text"
                     placeholder="Buscar por nombre o correo..."
-                    className="input"
+                    className="input-field"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ flex: 1, maxWidth: '400px', background: 'var(--glass-surface)' }}
+                    style={{ flex: 1, maxWidth: '400px' }}
                 />
             </div>
 
@@ -205,46 +211,49 @@ export default function ClientDirectoryTable({ initialPatients }: { initialPatie
             </div>
 
             {/* Edit Modal (using fixed overlay) */}
-            {selectedPatient && (
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
-                    <div className="dash-card slide-up" style={{ width: '100%', maxWidth: '400px', background: 'var(--glass-surface)', border: '1px solid var(--glass-border)', zIndex: 10000, position: 'relative' }}>
+            {/* Edit Modal (using React Portal for fixed overlay escape) */}
+            {mounted && selectedPatient && createPortal(
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 999999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(12px)' }}>
+                    <div className="slide-up" style={{ width: '100%', maxWidth: '420px', background: 'var(--bg-secondary)', padding: '2.5rem', border: '1px solid var(--glass-border)', zIndex: 1000000, position: 'relative', borderRadius: '20px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)', display: 'flex', flexDirection: 'column' }}>
 
-                        <button onClick={() => setSelectedPatient(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
-                            <X size={20} />
+                        <button onClick={() => setSelectedPatient(null)} style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', background: 'var(--glass-surface)', border: '1px solid var(--glass-border)', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', transition: 'all 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.background = 'var(--text-primary)'; e.currentTarget.style.color = 'var(--bg-color)'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'var(--glass-surface)'; e.currentTarget.style.color = 'var(--text-muted)'; }}>
+                            <X size={18} />
                         </button>
 
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Settings size={20} className="text-primary" /> Editar Paciente
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                            <Settings size={22} className="text-primary" /> Editar Paciente
                         </h3>
 
-                        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>Nombre Completo</label>
-                                <input type="text" className="input" value={selectedPatient.name} disabled style={{ opacity: 0.6 }} />
+                                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Nombre Completo</label>
+                                <input type="text" className="input-field" value={selectedPatient.name} disabled style={{ opacity: 0.8, cursor: 'not-allowed', background: 'var(--bg-color)' }} />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>Correo Electrónico</label>
-                                <input type="email" className="input" value={selectedPatient.email} disabled style={{ opacity: 0.6 }} />
+                                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Correo Electrónico</label>
+                                <input type="email" className="input-field" value={selectedPatient.email} disabled style={{ opacity: 0.8, cursor: 'not-allowed', background: 'var(--bg-color)' }} />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-primary)', marginBottom: '0.3rem' }}>Teléfono Móvil (Opcional)</label>
+                                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Teléfono Móvil (Opcional)</label>
                                 <input
                                     type="tel"
-                                    className="input"
+                                    className="input-field"
                                     value={editPhone}
                                     onChange={(e) => setEditPhone(e.target.value)}
-                                    placeholder="+52 55..."
+                                    placeholder="+52 55 1234 5678"
+                                    style={{ background: 'var(--surface-hover)', borderColor: 'var(--primary-glow)' }}
                                 />
                             </div>
 
-                            <button type="submit" disabled={isSaving} className="btn btn-primary" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', width: '100%' }}>
+                            <button type="submit" disabled={isSaving} className="btn btn-primary" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', width: '100%', padding: '0.85rem', fontSize: '1rem', fontWeight: 700 }}>
                                 {isSaving ? "Guardando..." : "Guardar Cambios"}
                             </button>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
