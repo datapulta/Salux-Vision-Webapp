@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth/authOptions";
 import { query } from "@/lib/db";
-import { Users, Mail, Calendar as CalendarIcon, FileText } from "lucide-react";
-import Link from 'next/link';
+import { Users } from "lucide-react";
 import { redirect } from 'next/navigation';
+import ClientDirectoryTable from "./ClientDirectoryTable";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +14,18 @@ export default async function AdminDirectoryPage() {
 
     try {
         const res = await query(`
-            SELECT id, name, email, role, provider, created_at
+            SELECT id, name, email, phone, is_active, role, provider, created_at
             FROM users 
             WHERE role = 'user'
             ORDER BY created_at DESC
         `);
 
-        const patients = res.rows;
+        // Convert Dates to ISO strings to avoid hydration errors traversing Server/Client Component boundary
+        const patients = res.rows.map(row => ({
+            ...row,
+            created_at: row.created_at.toISOString(),
+            is_active: Boolean(row.is_active)
+        }));
 
         return (
             <div className="fade-in pb-12">
@@ -41,79 +46,7 @@ export default async function AdminDirectoryPage() {
                     </div>
                 </div>
 
-                <div className="table-container fade-in">
-                    <div style={{ overflowX: 'auto' }}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>PACIENTE</th>
-                                    <th>CORREO / CONTACTO</th>
-                                    <th>FECHA DE REGISTRO</th>
-                                    <th style={{ textAlign: 'right' }}>ACCIONES</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {patients.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={4} style={{ padding: '4rem 2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                                            <Users size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.2 }} />
-                                            No hay pacientes registrados aún.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    patients.map((patient) => (
-                                        <tr key={patient.id}>
-                                            <td>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{
-                                                        width: '40px',
-                                                        height: '40px',
-                                                        background: 'var(--primary)',
-                                                        borderRadius: '12px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        color: 'white',
-                                                        fontWeight: 'bold',
-                                                        boxShadow: '0 4px 8px var(--primary-glow)'
-                                                    }}>
-                                                        {patient.name?.charAt(0).toUpperCase() || 'U'}
-                                                    </div>
-                                                    <div>
-                                                        <div style={{ color: 'var(--text-primary)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                            {patient.name}
-                                                            {patient.provider === 'google' ? (
-                                                                <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', background: 'rgba(66, 133, 244, 0.1)', color: '#4285f4', borderRadius: '4px', fontWeight: 'bold' }}>GOOGLE</span>
-                                                            ) : (
-                                                                <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', background: 'rgba(109, 93, 252, 0.1)', color: 'var(--primary)', borderRadius: '4px', fontWeight: 'bold' }}>EMAIL</span>
-                                                            )}
-                                                        </div>
-                                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ID: {patient.id.substring(0, 8)}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>
-                                                    <Mail size={14} /> {patient.email}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>
-                                                    <CalendarIcon size={14} /> {new Date(patient.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                                </div>
-                                            </td>
-                                            <td style={{ textAlign: 'right' }}>
-                                                <Link href={`/admin/appointments?user=${patient.id}`} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
-                                                    <FileText size={14} /> Expediente
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <ClientDirectoryTable initialPatients={patients} />
             </div>
         );
     } catch (error) {

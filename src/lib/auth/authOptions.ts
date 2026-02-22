@@ -38,6 +38,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         return null; // Si no existe el usuario, autorizacion fallida
                     }
 
+                    // Bloquear acceso si la cuenta fue suspendida en el panel de administrador
+                    if (user.is_active === false) {
+                        throw new Error("Su cuenta ha sido suspendida. Contacte soporte.");
+                    }
+
                     // Usuarios importados por Google podrían no tener password
                     if (!user.password_hash) {
                         return null;
@@ -73,6 +78,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     // 1. Verificamos si ya existe el usuario
                     const result = await query("SELECT * FROM users WHERE email = $1", [user.email]);
                     let dbUser = result.rows[0];
+
+                    if (dbUser && dbUser.is_active === false) {
+                        return false; // Bloquea si la cuenta está suspendida
+                    }
 
                     // 2. Si no existe, lo creamos de forma silenciosa
                     if (!dbUser) {
