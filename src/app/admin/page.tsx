@@ -14,7 +14,7 @@ export default async function AdminDirectoryPage() {
 
     try {
         const res = await query(`
-            SELECT id, name, email, role, created_at
+            SELECT id, name, email, role, provider, created_at
             FROM users 
             WHERE role = 'user'
             ORDER BY created_at DESC
@@ -80,7 +80,14 @@ export default async function AdminDirectoryPage() {
                                                         {patient.name?.charAt(0).toUpperCase() || 'U'}
                                                     </div>
                                                     <div>
-                                                        <div style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{patient.name}</div>
+                                                        <div style={{ color: 'var(--text-primary)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                            {patient.name}
+                                                            {patient.provider === 'google' ? (
+                                                                <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', background: 'rgba(66, 133, 244, 0.1)', color: '#4285f4', borderRadius: '4px', fontWeight: 'bold' }}>GOOGLE</span>
+                                                            ) : (
+                                                                <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', background: 'rgba(109, 93, 252, 0.1)', color: 'var(--primary)', borderRadius: '4px', fontWeight: 'bold' }}>EMAIL</span>
+                                                            )}
+                                                        </div>
                                                         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ID: {patient.id.substring(0, 8)}</div>
                                                     </div>
                                                 </div>

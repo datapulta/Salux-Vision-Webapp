@@ -78,8 +78,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     if (!dbUser) {
                         try {
                             const insertResult = await query(
-                                `INSERT INTO users (name, email, role) 
-                                 VALUES ($1, $2, 'user') RETURNING *`,
+                                `INSERT INTO users (name, email, role, provider) 
+                                 VALUES ($1, $2, 'user', 'google') RETURNING *`,
                                 [user.name, user.email]
                             );
                             dbUser = insertResult.rows[0];
