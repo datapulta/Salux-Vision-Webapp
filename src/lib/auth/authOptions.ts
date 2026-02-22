@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { query } from "@/lib/db";
 import { authConfig } from "./auth.config";
@@ -7,6 +8,16 @@ import { authConfig } from "./auth.config";
 export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            authorization: {
+                url: "https://accounts.google.com/o/oauth2/v2/auth",
+                params: { prompt: "consent", access_type: "offline", response_type: "code" }
+            },
+            token: "https://oauth2.googleapis.com/token",
+            userinfo: "https://openidconnect.googleapis.com/v1/userinfo",
+        }),
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -25,6 +36,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                     if (!user) {
                         return null; // Si no existe el usuario, autorizacion fallida
+                    }
+
+                    // Usuarios importados por Google podrían no tener password
+                    if (!user.password_hash) {
+                        return null;
                     }
 
                     // Verificamos si la contraseña tipeada coincide con el hash en la DB
@@ -47,5 +63,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
             }
         })
-    ]
+    ],
+    callbacks: {
+        ...authConfig.callbacks,
+        async signIn({ user, account, profile }) {
+            // Interceptamos inicio de sesión de Google
+            if (account?.provider === "google") {
+                try {
+                    // Verificamos si ya existe el usuario
+                    const result = await query("SELECT * FROM users WHERE email = $1", [user.email]);
+                    let dbUser = result.rows[0];
+
+                    // Si no existe, lo creamos automáticamente en la Base de Datos como paciente neutral ("user")
+                    if (!dbUser) {
+                        const insertResult = await query(
+                            `INSERT INTO users (name, email, role) 
+                             VALUES ($1, $2, 'user') RETURNING *`,
+                            [user.name, user.email]
+                        );
+                        dbUser = insertResult.rows[0];
+                    }
+
+                    // Empalmamos los datos de nuestra DB al objecto user en memoria, para que el middleware jwt se lo lleve
+                    user.role = dbUser.role;
+                    user.id = dbUser.id;
+
+                    return true;
+                } catch (error) {
+                    console.error("Error al registrar cuenta de Google en BD:", error);
+                    return false; // Bloquea acceso si la DB falla
+                }
+            }
+
+            return true; // Permitir signIn para credenciales clásicas
+        }
+    }
 });
