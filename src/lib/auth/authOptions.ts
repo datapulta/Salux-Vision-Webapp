@@ -70,28 +70,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             // Interceptamos inicio de sesión de Google
             if (account?.provider === "google") {
                 try {
-                    // Verificamos si ya existe el usuario
+                    // 1. Verificamos si ya existe el usuario
                     const result = await query("SELECT * FROM users WHERE email = $1", [user.email]);
                     let dbUser = result.rows[0];
 
-                    // Si no existe, lo creamos automáticamente en la Base de Datos como paciente neutral ("user")
+                    // 2. Si no existe, lo creamos de forma silenciosa
                     if (!dbUser) {
-                        const insertResult = await query(
-                            `INSERT INTO users (name, email, role) 
-                             VALUES ($1, $2, 'user') RETURNING *`,
-                            [user.name, user.email]
-                        );
-                        dbUser = insertResult.rows[0];
+                        try {
+                            const insertResult = await query(
+                                `INSERT INTO users (name, email, role) 
+                                 VALUES ($1, $2, 'user') RETURNING *`,
+                                [user.name, user.email]
+                            );
+                            dbUser = insertResult.rows[0];
+                        } catch (insertError) {
+                            console.error("❌ Fallo crítico al INSERTAR paciente Google a la BD de Dokploy:", insertError);
+                            // Si la BD falla insertando, NO bloqueamos a Google, solo le damos valores por defecto temporales
+                            dbUser = { role: 'user', id: `temp-${Date.now()}` };
+                        }
                     }
 
-                    // Empalmamos los datos de nuestra DB al objecto user en memoria, para que el middleware jwt se lo lleve
+                    // 3. Pasamos los datos recolectados
                     user.role = dbUser.role;
                     user.id = dbUser.id;
 
                     return true;
                 } catch (error) {
-                    console.error("Error al registrar cuenta de Google en BD:", error);
-                    return false; // Bloquea acceso si la DB falla
+                    console.error("❌ Error General en BDD al verificar usuario de Google:", error);
+                    // IMPORTANTE: Retornamos true siempre para no desviar a /api/auth/error?error=AccessDenied
+                    user.role = 'user';
+                    return true;
                 }
             }
 
